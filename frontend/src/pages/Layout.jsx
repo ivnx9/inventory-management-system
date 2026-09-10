@@ -3,6 +3,7 @@ import {
   BarChartOutlined,
   LogoutOutlined,
   ProductOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -52,6 +53,11 @@ function Layout() {
       icon: <BarChartOutlined />,
       label: "Reports",
     },
+    {
+      key: "/settings",
+      icon: <SettingOutlined />,
+      label: "Settings",
+    },
   ];
 
   return (
@@ -69,7 +75,7 @@ function Layout() {
         >
           <img
             src={logo}
-            alt="Inventory Logo"
+            alt="Stocky"
             style={{
               width: 36,
               height: 36,

@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
 import Layout from "./pages/Layout";
+import Settings from "./pages/Settings";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -48,6 +49,10 @@ function App() {
             path="/reports"
             element={<Reports />}
           />
+		  <Route
+			path="/settings"
+			element={<Settings />}
+		  />
         </Route>
 
         <Route
