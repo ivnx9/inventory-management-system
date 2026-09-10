@@ -1,11 +1,20 @@
 import { useState } from "react";
-import { Button, Card, Form, Input, message, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  message,
+  Typography,
+} from "antd";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 const { Title } = Typography;
 
 function Login() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (values) => {
     try {
@@ -18,11 +27,12 @@ function Login() {
 
       const { token, user } = response.data;
 
-		localStorage.setItem("token", token); // Save the JWT Token
-		localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-		message.success("Login successful!");
+      message.success("Login successful!");
 
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
 
