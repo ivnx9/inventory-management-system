@@ -10,7 +10,13 @@ import {
   Menu,
   Typography,
 } from "antd";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  Outlet,
+} from "react-router-dom";
+
+import logo from "../assets/logo.png";
 
 const { Header, Sider, Content } = AntLayout;
 const { Text } = Typography;
@@ -57,8 +63,20 @@ function Layout() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            gap: 10,
+            padding: "0 12px",
           }}
         >
+          <img
+            src={logo}
+            alt="Inventory Logo"
+            style={{
+              width: 36,
+              height: 36,
+              objectFit: "contain",
+            }}
+          />
+
           <Text
             strong
             style={{
@@ -66,7 +84,7 @@ function Layout() {
               fontSize: 18,
             }}
           >
-            Inventory
+            Stocky
           </Text>
         </div>
 
@@ -90,7 +108,7 @@ function Layout() {
           }}
         >
           <Text strong>
-            Inventory Management System
+            Stocky — Your Friendly Inventory Management System
           </Text>
 
           <div

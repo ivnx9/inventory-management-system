@@ -1,4 +1,13 @@
-import { Card, Col, Row, Statistic, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Statistic,
+  Typography,
+  message,
+} from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
@@ -8,25 +17,38 @@ function Dashboard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const response = await api.get("/products");
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Failed to load dashboard data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadProducts = async (showMessage = false) => {
+    try {
+      setLoading(true);
 
+      const response = await api.get("/products");
+
+      setProducts(response.data);
+
+      if (showMessage) {
+        message.success("Dashboard refreshed.");
+      }
+    } catch (error) {
+      console.error("Failed to load dashboard data:", error);
+
+      message.error(
+        error.response?.data?.message ||
+          "Failed to load dashboard data."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadProducts();
   }, []);
 
   const totalProducts = products.length;
 
   const totalQuantity = products.reduce(
-    (total, product) => total + Number(product.quantity || 0),
+    (total, product) =>
+      total + Number(product.quantity || 0),
     0
   );
 
@@ -40,7 +62,26 @@ function Dashboard() {
 
   return (
     <div>
-      <Title level={2}>Dashboard</Title>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 24,
+        }}
+      >
+        <Title level={2} style={{ margin: 0 }}>
+          Dashboard
+        </Title>
+
+        <Button
+          icon={<ReloadOutlined />}
+          onClick={() => loadProducts(true)}
+          loading={loading}
+        >
+          Refresh
+        </Button>
+      </div>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} md={8}>
