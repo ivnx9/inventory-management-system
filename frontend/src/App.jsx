@@ -11,12 +11,25 @@ import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
+import UserManagement from "./pages/UserManagement";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
   if (!token) {
     return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
+
+function AdminRoute({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
+
+  if (user.role !== "admin") {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
@@ -49,10 +62,20 @@ function App() {
             path="/reports"
             element={<Reports />}
           />
-		  <Route
-			path="/settings"
-			element={<Settings />}
-		  />
+
+          <Route
+            path="/settings"
+            element={<Settings />}
+          />
+
+          <Route
+            path="/users"
+            element={
+              <AdminRoute>
+                <UserManagement />
+              </AdminRoute>
+            }
+          />
         </Route>
 
         <Route

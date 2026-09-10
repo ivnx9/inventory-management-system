@@ -8,9 +8,11 @@ import {
   Typography,
 } from "antd";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
 
+import api from "../services/api";
 import mascot from "../assets/mascot.png";
+
+import "../App.css";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -47,7 +49,8 @@ function Login() {
       console.error("Login error:", error);
 
       message.error(
-        error.response?.data?.message || "Login failed."
+        error.response?.data?.message ||
+          "Login failed."
       );
     } finally {
       setLoading(false);
@@ -55,148 +58,50 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        background: "#f5f7fb",
-      }}
-    >
-      {/* Left Branding Section */}
-      <div
-        style={{
-          flex: 1,
-          minHeight: "100vh",
-          background:
-            "linear-gradient(135deg, #071b49 0%, #0b4fba 55%, #18aef0 100%)",
-          color: "white",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          padding: 48,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Decorative shapes */}
-        <div
-          style={{
-            position: "absolute",
-            width: 350,
-            height: 350,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.06)",
-            top: -120,
-            left: -120,
-          }}
-        />
+    <div className="login-page">
+      {/* Branding Section */}
+      <div className="login-brand">
+        <div className="login-brand-decoration login-decoration-one" />
+        <div className="login-brand-decoration login-decoration-two" />
 
-        <div
-          style={{
-            position: "absolute",
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.05)",
-            bottom: -100,
-            right: -100,
-          }}
-        />
-
-        {/* Brand Content */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: "100%",
-            maxWidth: 520,
-          }}
-        >
+        <div className="login-brand-content">
           <Title
-            style={{
-              color: "white",
-              fontSize: 42,
-              marginBottom: 8,
-            }}
+            className="login-brand-title"
           >
             Stocky
           </Title>
 
-          <Text
-            style={{
-              color: "rgba(255,255,255,0.9)",
-              fontSize: 18,
-            }}
-          >
+          <Text className="login-brand-subtitle">
             Your Friendly Inventory Management System
           </Text>
 
-          {/* Stocky Mascot */}
-          <div
-            style={{
-              height: 360,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 20,
-            }}
-          >
+          <div className="login-mascot-container">
             <img
               src={mascot}
               alt="Stocky mascot"
-              style={{
-                width: "100%",
-                maxWidth: 360,
-                maxHeight: 360,
-                objectFit: "contain",
-                filter:
-                  "drop-shadow(0 18px 25px rgba(0, 0, 0, 0.25))",
-              }}
+              className="login-mascot"
             />
           </div>
 
-          <Paragraph
-            style={{
-              color: "rgba(255,255,255,0.8)",
-              fontSize: 16,
-              maxWidth: 420,
-              margin: "0 auto",
-            }}
-          >
+          <Paragraph className="login-brand-description">
             Keep your products organized, track inventory,
             and manage your stock with ease.
           </Paragraph>
         </div>
       </div>
 
-      {/* Right Login Section */}
-      <div
-        style={{
-          width: "45%",
-          minWidth: 420,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 40,
-        }}
-      >
+      {/* Login Section */}
+      <div className="login-form-section">
         <Card
           bordered={false}
-          style={{
-            width: "100%",
-            maxWidth: 430,
-            borderRadius: 16,
-            boxShadow: "0 12px 40px rgba(0, 0, 0, 0.08)",
-          }}
+          className="login-card"
           styles={{
             body: {
               padding: 40,
             },
           }}
         >
-          <div style={{ marginBottom: 32 }}>
+          <div className="login-heading">
             <Title
               level={2}
               style={{
@@ -222,7 +127,8 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: "Please enter your username.",
+                  message:
+                    "Please enter your username.",
                 },
               ]}
             >
@@ -238,7 +144,8 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: "Please enter your password.",
+                  message:
+                    "Please enter your password.",
                 },
               ]}
             >
@@ -248,7 +155,11 @@ function Login() {
               />
             </Form.Item>
 
-            <Form.Item style={{ marginBottom: 0 }}>
+            <Form.Item
+              style={{
+                marginBottom: 0,
+              }}
+            >
               <Button
                 type="primary"
                 htmlType="submit"
@@ -266,13 +177,13 @@ function Login() {
             </Form.Item>
           </Form>
 
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: 28,
-            }}
-          >
-            <Text type="secondary" style={{ fontSize: 13 }}>
+          <div className="login-footer">
+            <Text
+              type="secondary"
+              style={{
+                fontSize: 13,
+              }}
+            >
               Stocky Inventory Management System
             </Text>
           </div>

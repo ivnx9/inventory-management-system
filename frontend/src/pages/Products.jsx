@@ -221,6 +221,7 @@ function Products() {
           columns={columns}
           dataSource={products}
           loading={loading}
+		  scroll={{ x: 900 }}
         />
       </Card>
 

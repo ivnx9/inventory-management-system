@@ -4,13 +4,16 @@ import {
   LogoutOutlined,
   ProductOutlined,
   SettingOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
+
 import {
   Button,
   Layout as AntLayout,
   Menu,
   Typography,
 } from "antd";
+
 import {
   useNavigate,
   useLocation,
@@ -58,11 +61,24 @@ function Layout() {
       icon: <SettingOutlined />,
       label: "Settings",
     },
+
+    ...(user.role === "admin"
+      ? [
+          {
+            key: "/users",
+            icon: <TeamOutlined />,
+            label: "User Management",
+          },
+        ]
+      : []),
   ];
 
   return (
     <AntLayout style={{ minHeight: "100vh" }}>
-      <Sider breakpoint="lg" collapsedWidth="0">
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+      >
         <div
           style={{
             height: 64,
@@ -111,20 +127,55 @@ function Layout() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            gap: 16,
+            minWidth: 0,
           }}
         >
-          <Text strong>
-            Stocky — Your Friendly Inventory Management System
-          </Text>
+          {/* Desktop title / mobile title */}
+          <div
+            style={{
+              minWidth: 0,
+              flex: 1,
+              overflow: "hidden",
+            }}
+          >
+            <Text
+              strong
+              style={{
+                display: "block",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span className="desktop-header-title">
+                Stocky — Your Friendly Inventory Management System
+              </span>
 
+              <span className="mobile-header-title">
+                Stocky
+              </span>
+            </Text>
+          </div>
+
+          {/* User / Logout */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 12,
+              flexShrink: 0,
             }}
           >
-            <Text>
+            <Text
+              strong
+              style={{
+                maxWidth: 120,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {user.username || "User"}
             </Text>
 
@@ -132,7 +183,9 @@ function Layout() {
               icon={<LogoutOutlined />}
               onClick={handleLogout}
             >
-              Logout
+              <span className="logout-text">
+                Logout
+              </span>
             </Button>
           </div>
         </Header>
@@ -140,6 +193,8 @@ function Layout() {
         <Content
           style={{
             margin: 24,
+            minWidth: 0,
+            overflow: "hidden",
           }}
         >
           <Outlet />
