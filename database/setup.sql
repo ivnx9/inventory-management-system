@@ -49,5 +49,20 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (
+    SELECT 1
+    FROM Users
+    WHERE username = 'admin'
+)
+BEGIN
+    INSERT INTO Users (username, password_hash, role)
+    VALUES (
+        'admin',
+        '$2b$10$n9zjiRwdFQAspifoyhhx1OKdYWDDPHro0AVK9AyNFZsbBjC51LSaS',
+        'admin'
+    );
+END
+GO
+
 PRINT 'Stocky database setup completed successfully.';
 GO
