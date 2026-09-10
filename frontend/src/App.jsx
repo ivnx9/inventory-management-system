@@ -1,8 +1,14 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 
 import Login from "./pages/Login";
 import Products from "./pages/Products";
 import Dashboard from "./pages/Dashboard";
+import Reports from "./pages/Reports";
 import Layout from "./pages/Layout";
 
 function ProtectedRoute({ children }) {
@@ -19,10 +25,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public route */}
         <Route path="/" element={<Login />} />
 
-        {/* Protected application */}
         <Route
           element={
             <ProtectedRoute>
@@ -30,23 +34,27 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/products" element={<Products />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+          <Route
+            path="/products"
+            element={<Products />}
+          />
+
           <Route
             path="/reports"
-            element={
-              <div>
-                <h2>Reports</h2>
-                <p>Inventory report coming next.</p>
-              </div>
-            }
+            element={<Reports />}
           />
         </Route>
 
-        {/* Unknown URL */}
         <Route
           path="*"
-          element={<Navigate to="/dashboard" replace />}
+          element={
+            <Navigate to="/dashboard" replace />
+          }
         />
       </Routes>
     </BrowserRouter>
