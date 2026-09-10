@@ -4,6 +4,71 @@ A simple full-stack Inventory Management System built for the **LLI Developer Ex
 
 Stocky allows authorized users to manage products, monitor inventory, view reports, and manage user accounts according to their assigned role.
 
+## Quick Start
+
+### First-time setup
+
+After cloning the repository, make sure **Node.js and npm** are installed, then run:
+
+```bat
+setup.bat
+```
+
+The setup script automatically:
+
+- checks that Node.js and npm are available
+- installs backend dependencies with `npm install`
+- installs frontend dependencies with `npm install`
+- creates `backend/.env` from `backend/.env.example` when needed
+
+**You do not need to install Axios, React Router, Express, or the other libraries manually.** The required libraries are already declared in the project's `package.json` files, and `npm install` reads those files and installs the required dependencies automatically.
+
+### Database setup
+
+SQL Server is a prerequisite and is intentionally not installed or configured by the setup script.
+
+Open **SQL Server Management Studio (SSMS)** and run:
+
+```text
+database/setup.sql
+```
+
+The script creates the `InventoryDB` database and the required tables if they do not already exist.
+
+Then open:
+
+```text
+backend/.env
+```
+
+and enter your local SQL Server password and JWT secret.
+
+### Start Stocky
+
+Once the database and `.env` are configured:
+
+```bat
+start.bat
+```
+
+This opens separate terminal windows for the backend and frontend.
+
+The application is normally available at:
+
+```text
+http://localhost:5173
+```
+
+The API runs at:
+
+```text
+http://localhost:5000
+```
+
+> **Windows quick-start:** `setup.bat` is for first-time setup. `start.bat` is for starting the application after setup.
+
+---
+
 ## Project Overview
 
 Stocky is designed as an internal inventory system for a company.
@@ -38,7 +103,7 @@ React + Ant Design
 - Protected application routes
 - Role-based authorization
 - Secure password hashing using bcrypt
-- Session/token expiration
+- Token expiration
 
 ### Product Management
 
@@ -115,7 +180,7 @@ The system currently supports two roles:
 
 The `user` role is displayed in the interface as **Staff**.
 
-User Management is hidden from Staff users in the navigation, while the route and backend API are also protected against unauthorized access.
+User Management is hidden from Staff users in the navigation, while the frontend route and backend API are also protected against unauthorized access.
 
 ## Technologies
 
@@ -179,7 +244,11 @@ inventory-management-system/
 │   │   │   └── userRoutes.js
 │   │   └── server.js
 │   ├── .env
+│   ├── .env.example
 │   └── package.json
+│
+├── database/
+│   └── setup.sql
 │
 ├── frontend/
 │   ├── src/
@@ -200,6 +269,8 @@ inventory-management-system/
 │   │   └── App.css
 │   └── package.json
 │
+├── setup.bat
+├── start.bat
 ├── README.md
 └── .gitignore
 ```
@@ -208,51 +279,76 @@ inventory-management-system/
 
 The application uses Microsoft SQL Server.
 
-Create a database named:
+For a new installation, run:
 
-```sql
+```text
+database/setup.sql
+```
+
+in SQL Server Management Studio.
+
+The script creates:
+
+```text
 InventoryDB
+├── Users
+└── Products
 ```
 
-Then create the required tables.
-
-### Users Table
+The `Users` table contains:
 
 ```sql
-USE InventoryDB;
-GO
-
-CREATE TABLE Users (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    username NVARCHAR(50) NOT NULL UNIQUE,
-    password_hash NVARCHAR(255) NOT NULL,
-    role NVARCHAR(20) NOT NULL DEFAULT 'user',
-    created_at DATETIME2 NOT NULL DEFAULT GETDATE()
-);
-GO
+id
+username
+password_hash
+role
+created_at
 ```
 
-### Products Table
+The `Products` table contains:
 
 ```sql
-CREATE TABLE Products (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    name NVARCHAR(100) NOT NULL,
-    sku NVARCHAR(50) NOT NULL UNIQUE,
-    category NVARCHAR(50) NOT NULL,
-    quantity INT NOT NULL DEFAULT 0,
-    unit_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    created_at DATETIME2 NOT NULL DEFAULT GETDATE(),
-    updated_at DATETIME2 NOT NULL DEFAULT GETDATE()
-);
-GO
+id
+name
+sku
+category
+quantity
+unit_price
+created_at
+updated_at
 ```
+
+### SQL Server TCP/IP Configuration
+
+If the backend cannot connect to SQL Server through `localhost:1433`, make sure TCP/IP is enabled in **SQL Server Configuration Manager**.
+
+The SQL Server TCP/IP configuration should use port:
+
+```text
+1433
+```
+
+After changing the TCP/IP configuration, restart the SQL Server service.
+
+This was an important setup requirement during development.
 
 ## Backend Configuration
 
-Create a `.env` file inside the `backend` folder.
+The repository includes:
 
-Example:
+```text
+backend/.env.example
+```
+
+For local development, `setup.bat` can copy this file to:
+
+```text
+backend/.env
+```
+
+if `.env` does not already exist.
+
+Edit `backend/.env` and replace the placeholders:
 
 ```env
 DB_SERVER=localhost
@@ -261,40 +357,61 @@ DB_USER=sa
 DB_PASSWORD=YOUR_DATABASE_PASSWORD
 DB_ENCRYPT=true
 DB_TRUST_SERVER_CERT=true
-JWT_SECRET=YOUR_JWT_SECRET
+JWT_SECRET=CHANGE_THIS_TO_A_LONG_RANDOM_SECRET
 ```
 
-Replace the placeholder values with the credentials for the local SQL Server installation.
-
-**Do not commit `.env` or real credentials to GitHub.**
+**Never commit the real `.env` file or database credentials to GitHub.**
 
 The project uses environment variables so database credentials and the JWT secret are not hard-coded into the application.
 
-## Install Dependencies
+## Installing Dependencies
 
-Open a terminal in the project folder.
+You do **not** need to manually install each library.
 
-### Backend
+For example, you do not need to run:
+
+```bash
+npm install axios
+npm install react-router-dom
+npm install express
+```
+
+individually.
+
+The dependencies are already declared in:
+
+```text
+backend/package.json
+frontend/package.json
+```
+
+Therefore, the normal installation process is simply:
 
 ```bash
 cd backend
 npm install
 ```
 
-### Frontend
-
-Open another terminal:
+and:
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Run the Application
+or, on Windows, just run:
 
-The backend and frontend should be started separately.
+```bat
+setup.bat
+```
 
-### 1. Start the Backend
+The setup script performs both `npm install` operations automatically.
+
+## Running the Application Manually
+
+The BAT files are provided for convenience, but the application can also be started manually.
+
+### Backend
 
 ```bash
 cd backend
@@ -308,7 +425,7 @@ Database connected successfully.
 Server running on http://localhost:5000
 ```
 
-### 2. Start the Frontend
+### Frontend
 
 In another terminal:
 
@@ -323,22 +440,6 @@ Vite will display the local frontend address, normally:
 http://localhost:5173
 ```
 
-Open that address in a browser.
-
-## SQL Server TCP/IP Configuration
-
-If the backend cannot connect to SQL Server through `localhost:1433`, make sure TCP/IP is enabled in **SQL Server Configuration Manager**.
-
-The SQL Server TCP/IP configuration should use port:
-
-```text
-1433
-```
-
-After changing the TCP/IP configuration, restart the SQL Server service.
-
-This was an important setup requirement during development.
-
 ## Test Account
 
 The development environment includes an administrator account used for testing.
@@ -351,7 +452,7 @@ Role: admin
 
 This is a **development/test account only**. Do not use this password in a production deployment.
 
-If setting up a completely new database, create an administrator account using the application's user-management/authentication setup with a properly generated password hash rather than storing a plain-text password in the database.
+If setting up a completely new database, the administrator account must be created with a bcrypt password hash. Do not insert the plaintext password into the `password_hash` column.
 
 ## REST API
 
@@ -432,11 +533,12 @@ The frontend automatically attaches the token to API requests after login.
 
 ## API Testing
 
-The REST API can be tested using tools such as:
+The REST API can be tested using:
 
 - Postman
 - Insomnia
-- The included frontend interface
+- The frontend application
+- Any REST API client
 
 ### Example Product Request
 
